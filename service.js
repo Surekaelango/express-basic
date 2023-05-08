@@ -1,38 +1,39 @@
-
 const express=require('express')
 const router=express.Router()
 router.get('/',(req,res)=>{
   res.send("Service Page")
 })
 
-router.get('/:id([0-9])',(req,res)=>{
+router.get('/:id',(req,res)=>{
 
-  if(req.params.id<=ServiceArrayLength){
-    res.send(`Service Name for this id ${service[req.params.id-1].idno} is ${service[req.params.id-1].name}`)
+  if(req.params.id<service.length){
+    res.send(req.services.name)
   }
   else{
-    res.send("Wrong id")
+    res.send("Service Not Found")
   }
-  // res.send(`List of Service ${req.params.id}`)
 })
+const service=[
+  {
+    id:0,
+    name:'App development'
+  },
+  {
+    id:1,
+    name:'Web development'
+  },
+  {
+    id:2,
+    name:'Iot development'
+  },
+  {
+    id:3,
+    name:'Embedded system'
 
-
-const service=[{
-  idno:1,
-  name:'ser 1'
-},
-{
-  idno:2,
-  name:'ser 2'
-},
-{
-  idno:3,
-  name:'ser 3'
-},
-{
-  idno:4,
-  name:'ser 4'
-}]
-
-const ServiceArrayLength=service.length;
+  }
+]
+router.param('id',(req,res,next,id)=>{
+  req.services=service[id];
+  next();
+})
 module.exports=router;
